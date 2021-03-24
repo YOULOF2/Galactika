@@ -24,3 +24,4 @@ psycopg2-binary==2.8.6
 python-dotenv==0.15.0
 pdfkit==0.6.1
 python-pdf==0.38
+PyPDF2==1.26.0
