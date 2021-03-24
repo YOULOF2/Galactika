@@ -99,7 +99,7 @@ def get_top_news():
         "apiKey": NEWS_API_KEY
     }
     response = requests.get(url=ENDPOINT, params=parameters)
-    print(response.raise_for_status())
+    response.raise_for_status()
     try:
         return response.json()["articles"]
     except KeyError:

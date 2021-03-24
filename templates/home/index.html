@@ -21,11 +21,11 @@
             </div>
         </div>
     {% endif %}
-      <div class="jumbotron">
+      <div class="col-lg-12 col-md-12 col-sm-2 jumbotron">
          <h1 class="flash_news_title">Flash News:</h1>
           <div class="row mb-2 featured_post" style="padding-left:0%">
-            {% for post in featured_posts[:3]: %}
-              <div class="card" style="width: 18rem;">
+            {% for post in featured_posts[:6]: %}
+              <div class="card" style="width: 15rem;">
                 <img src="{{ post['urlToImage'] }}" class="card-img-top" onerror="this.onerror=null; this.src='static/home/img/image_not_found.png'">
                 <div class="card-body">
                   <h5 class="card-title feature_title">{{ post["title"] }}</h5>

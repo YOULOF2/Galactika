@@ -1,0 +1,10 @@
+.info-img {
+    width: 50%;
+    padding: 5%;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

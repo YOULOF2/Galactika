@@ -9,7 +9,7 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto content">
+      <div class="col-lg-8 col-md-10 mx-auto content jumbotron">
           {% with messages = get_flashed_messages() %}
               {% if messages %}
                 {% for message in messages %}
@@ -17,6 +17,8 @@
                 {% endfor %}
               {% endif %}
           {% endwith %}
+          <h3 class="flash_news_title">Welcome Back!</h3>
+          <img class="info-img center" src="{{ url_for('static', filename='galactic blog/img/login_img.svg') }}">
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
       </div>
     </div>
