@@ -1,0 +1,18 @@
+<body style="background: url('https://images.unsplash.com/photo-1534841090574-cba2d662b62e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fHNwYWNlfGVufDB8MXwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto" style="padding:10%;color:white;">
+                <div class="jumbotron rounded">
+                    <h1 class="flash_news_title">Quote Time!!</h1>
+                    <ol>
+                    {% for quote in all_data['quotes']:  %}
+                        <li style="padding:2%">
+                            <h5 style="color:white;">"{{ quote["text"] }}"</h5><h6 style="color: lightslategray;">{{ quote["author"] }}</h6>
+                        </li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

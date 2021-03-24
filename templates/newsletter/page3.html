@@ -1,0 +1,22 @@
+<body style="background: url('https://images.unsplash.com/photo-1534841090574-cba2d662b62e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fHNwYWNlfGVufDB8MXwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto" style="padding:10%;color:white;">
+                <div class="jumbotron rounded">
+                    <h1 class="flash_news_title">Trivia Time!!</h1>
+                    <ul>
+                    {% for question in all_data['trivia']:  %}
+                        <li style="padding:2%">
+                                <h4 style="color:white;">{{ question["question"] }}</h4>
+                        <ul>
+                                <li><h5 style="color:green;">True</h5></li>
+                                <li><h5 style="color:red;">False</h5></li>
+                            </ul>
+                        </li>
+                    {% endfor %}s
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

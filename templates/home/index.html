@@ -1,0 +1,48 @@
+{% include "header.html" %}
+  <body>
+
+<main class="container">
+    {% if show_posts: %}
+        <div class="jumbotron">
+            <h1 class="flash_news_title">The Latest Blog Post:</h1>
+            <div class="post-preview bg-dark rounded" style="padding:3%">
+                  <a href="{{ url_for('show_post', post_id=latest_post.id) }}">
+                    <h2 class="post-title">
+                      {{latest_post.title}}
+                    </h2>
+                    <h3 class="post-subtitle">
+                      {{latest_post.subtitle}}
+                    </h3>
+                  </a>
+                  <p class="post-meta">Posted by
+                    <a href="#" >{{latest_post.author.name}}</a>
+                    on {{latest_post.date}}
+                  </p>
+            </div>
+        </div>
+    {% endif %}
+      <div class="jumbotron">
+         <h1 class="flash_news_title">Flash News:</h1>
+          <div class="row mb-2 featured_post" style="padding-left:0%">
+            {% for post in featured_posts[:3]: %}
+              <div class="card" style="width: 18rem;">
+                <img src="{{ post['urlToImage'] }}" class="card-img-top" onerror="this.onerror=null; this.src='static/home/img/image_not_found.png'">
+                <div class="card-body">
+                  <h5 class="card-title feature_title">{{ post["title"] }}</h5>
+                  <p class="card-text">{{ post[description] }}</p>
+                  <a href="{{ post['url'] }}" class="btn btn-primary">Continue Reading</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('flash_news') }}">Discover More</a>
+      </div>
+
+</main><!-- /.container -->
+
+{% include "footer.html" %}
+
+
+
+  </body>
+</html>

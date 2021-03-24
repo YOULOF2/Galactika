@@ -1,0 +1,25 @@
+{% include "header.html" %}
+
+
+</div>
+
+<main class="container">
+  <div class="jumbotron">
+     <h1 class="flash_news_title">Flash News:</h1>
+      <div class="row mb-2 featured_post">
+        {% for post in featured_posts: %}
+          <div class="card" style="width: 18rem;">
+            <img src="{{ post['urlToImage'] }}" class="card-img-top" onerror="this.onerror=null; this.src='static/home/img/image_not_found.png'">
+            <div class="card-body">
+              <h5 class="card-title feature_title">{{ post["title"] }}</h5>
+              <p class="card-text">{{ post[description] }}</p>
+              <a href="{{ post['url'] }}" class="btn btn-primary">Continue Reading</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('refresh') }}">Refresh News</a>
+  </div>
+</main>
+</body>
+{% include "footer.html" %}

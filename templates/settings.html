@@ -1,0 +1,40 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+{% include "header.html" %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto jumbotron">
+      {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+    <div class="col-lg-8 col-md-10 mx-auto jumbotron">
+      <h4 class="flash_news_title">Change Your Background Image</h4>
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img class="d-block w-100" src="{{ favourite_bg }}" alt="First slide">
+          </div>
+          {% for wallpaper in all_wallpapers: %}
+            <div class="carousel-item">
+              <a href="{{ url_for('set_wallapper', wallpaper_number=all_wallpapers.index(wallpaper)) }}"><img class="d-block w-100" src="{{ wallpaper }}" alt="First slide"></a>
+            </div>
+          {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+{% include "footer.html" %}
+{% endblock %}
