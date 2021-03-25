@@ -178,7 +178,7 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
-# db.create_all()
+db.create_all()
 
 
 # ==================================================================================================================== #
@@ -285,7 +285,8 @@ def magazine():
         maker.delete_magic()
         maker.make_magic()
         return send_from_directory(directory="static/newsletter/pdfs", filename="final_issue.pdf")
-    return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download", user_logged_in=current_user.is_authenticated)
+    return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download",
+                           user_logged_in=current_user.is_authenticated)
 
 
 # ==================================================================================================================== #
