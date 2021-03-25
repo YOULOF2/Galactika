@@ -121,7 +121,7 @@ class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     # ********** Add Children Relationship ********** #
-    posts = relationship("BlogPost", back_populates="author")
+    posts = relationship("blog-posts", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
     # *********************************************** #
 
@@ -134,7 +134,7 @@ class User(db.Model, UserMixin):
 
 
 class BlogPost(db.Model):
-    __tablename__ = "blogposts"
+    __tablename__ = "blog-posts"
     id = db.Column(db.Integer, primary_key=True)
 
     # ********** Add Parent Relationship ********** #
@@ -163,8 +163,8 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     comment_author = relationship("User", back_populates="comments")
 
-    parent_post = relationship("BlogPost", back_populates="comments")
-    post_id = db.Column(db.Integer, db.ForeignKey("blogposts.id"))
+    parent_post = relationship("blog-posts", back_populates="comments")
+    post_id = db.Column(db.Integer, db.ForeignKey("blog-posts.id"))
     # ********************************************* #
 
     text = db.Column(db.Text, nullable=False)
@@ -178,7 +178,7 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
-# db.create_all()
+db.create_all()
 
 
 # ==================================================================================================================== #
