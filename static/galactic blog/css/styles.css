@@ -8,3 +8,15 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.carousel-card {
+    width: 100%;
+}
+
+.carousel-pad {
+    padding: 14rem;
+}
+
+.carousel-text {
+    color:goldenrod
+}

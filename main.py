@@ -285,7 +285,7 @@ def magazine():
         maker.delete_magic()
         maker.make_magic()
         return send_from_directory(directory="static/newsletter/pdfs", filename="final_issue.pdf")
-    return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper())
+    return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download", user_logged_in=current_user.is_authenticated)
 
 
 # ==================================================================================================================== #

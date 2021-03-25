@@ -1,48 +1,84 @@
 {% include "header.html" %}
-  <body>
 
-<main class="container">
-    {% if show_posts: %}
+<body>
+
+    <main class="container">
+        {% if show_posts: %}
         <div class="jumbotron">
             <h1 class="flash_news_title">The Latest Blog Post:</h1>
             <div class="post-preview bg-dark rounded" style="padding:3%">
-                  <a href="{{ url_for('show_post', post_id=latest_post.id) }}">
+                <a href="{{ url_for('show_post', post_id=latest_post.id) }}">
                     <h2 class="post-title">
-                      {{latest_post.title}}
+                        {{latest_post.title}}
                     </h2>
                     <h3 class="post-subtitle">
-                      {{latest_post.subtitle}}
+                        {{latest_post.subtitle}}
                     </h3>
-                  </a>
-                  <p class="post-meta">Posted by
-                    <a href="#" >{{latest_post.author.name}}</a>
+                </a>
+                <p class="post-meta">Posted by
+                    <a href="#">{{latest_post.author.name}}</a>
                     on {{latest_post.date}}
-                  </p>
+                </p>
             </div>
         </div>
-    {% endif %}
-      <div class="col-lg-12 col-md-12 col-sm-2 jumbotron">
-         <h1 class="flash_news_title">Flash News:</h1>
-          <div class="row mb-2 featured_post" style="padding-left:0%">
-            {% for post in featured_posts[:6]: %}
-              <div class="card" style="width: 15rem;">
-                <img src="{{ post['urlToImage'] }}" class="card-img-top" onerror="this.onerror=null; this.src='static/home/img/image_not_found.png'">
-                <div class="card-body">
-                  <h5 class="card-title feature_title">{{ post["title"] }}</h5>
-                  <p class="card-text">{{ post[description] }}</p>
-                  <a href="{{ post['url'] }}" class="btn btn-primary">Continue Reading</a>
+        {% endif %}
+        <div class="col-md-12 col-sm-2 jumbotron">
+            <h1 class="flash_news_title">Flash News:</h1>
+            <div class="row mb-2 featured_post" style="padding-left:0%">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        {% for i in range(featured_posts[1:5]|length) %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="{{ i }}"></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div style="background-image: url('{{ featured_posts[0]['urlToImage'] }}');">
+                                <div>
+                                    <a href="{{ featured_posts[0]['url'] }}">
+                                        <h5 class="carousel-text carousel-card carousel-pad">
+                                            {{ featured_posts[0]["title"] }}</h5>
+                                        <p class="">{{ featured_posts[0][description] }}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% for post in featured_posts[1:5]: %}
+                            {% if post["urlToImage"] != null %}
+                                <div class="carousel-item">
+                                    <div style="background-image: url('{{ post['urlToImage'] }}');">
+                                        <div>
+                                            <a href="{{ post['url'] }}">
+                                                <h5 class="carousel-text carousel-card carousel-pad">{{ post["title"] }}</h5>
+                                                <p class="">{{ post[description] }}</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
                 </div>
-              </div>
-            {% endfor %}
-          </div>
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('flash_news') }}">Discover More</a>
-      </div>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('flash_news') }}">Discover More</a>
+            </div>
+        </div>
 
-</main><!-- /.container -->
+    </main><!-- /.container -->
 
-{% include "footer.html" %}
+    {% include "footer.html" %}
 
 
+</body>
 
-  </body>
 </html>
