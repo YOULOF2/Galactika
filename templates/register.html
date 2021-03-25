@@ -4,18 +4,20 @@
 {% block content %}
 {% include "header.html" %}
 
-  <!-- Page Header -->
+<!-- Page Header -->
 
 
-  <div class="container">
+<div class="container">
     <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-       
-       {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-
-      </div>
+        <div class="col-md-10 mx-auto">
+            <div class="jumbotron">
+                <h3 class="flash_news_title">Hello!</h3>
+                <img class="info-img center" src="{{ url_for('static', filename='site-images/register.svg') }}"> {{
+                wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 
 {% include "footer.html" %}
 {% endblock %}

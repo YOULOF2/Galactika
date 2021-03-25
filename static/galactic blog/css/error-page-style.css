@@ -44,7 +44,7 @@ body {
   -webkit-transform: translateX(-50%);
       -ms-transform: translateX(-50%);
           transform: translateX(-50%);
-  background: url('../img/error-page-pic.jpg') no-repeat;
+  background: url('/static/site-images/error-page-pic.jpg') no-repeat;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: cover;

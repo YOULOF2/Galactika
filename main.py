@@ -279,10 +279,8 @@ def set_wallapper(wallpaper_number):
 
 @app.route("/magazine", methods=["GET", "POST"])
 def magazine():
-    # if request.method == "POST":
-    if request.args.get("action") == "download":
+    if request.method == "POST":
         maker = NewsLetterMaker()
-        maker.delete_magic()
         maker.make_magic()
         return send_from_directory(directory="static/newsletter/pdfs", filename="final_issue.pdf")
     return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download",

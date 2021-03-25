@@ -18,5 +18,12 @@
 }
 
 .carousel-text {
-    color:goldenrod
+    color: white;
+    mix-blend-mode: difference;
+}
+
+.carousel-text:after {
+    /* This value is the OPPOSITE color of our background */
+    color: rgb(0, 0, 0); 
+    mix-blend-mode: difference;
 }

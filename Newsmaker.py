@@ -5,6 +5,8 @@ import os
 import requests
 from random import choice
 import json
+from time import sleep
+
 # to save the results
 
 
@@ -31,12 +33,18 @@ class NewsLetterMaker:
         }
 
     def make_magic(self):
-
         """
         This method takes the relevantint information in and automaticaly produces a pdf.
         According to self.issue_pages list, the pages are made.
         The output location can be changed by changing the self.issue_location string value.
         """
+        try:
+            os.remove(self.issue_location)
+            for file in self.issue_pages[1:]:
+                os.remove(file)
+        except FileNotFoundError:
+            pass
+
         options = {
             "page-size": "a4",
             "margin-top": "0in",
@@ -58,11 +66,4 @@ class NewsLetterMaker:
         for file in self.issue_pages:
             self.merger.append(PdfFileReader(open(file, 'rb')), import_bookmarks=False)
         self.merger.write(self.issue_location)
-        for file in self.issue_pages[1:]:
-            os.remove(file)
 
-    def delete_magic(self):
-        """
-        This function delets the pdf file made.
-        """
-        os.remove(self.issue_location)

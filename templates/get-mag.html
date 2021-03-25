@@ -9,12 +9,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="col-md-10 mx-auto">
             <div class="jumbotron">
-                <img class="info-img center" src="{{ url_for('static', filename='galactic blog/img/book.svg') }}">
-                <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('magazine', action='download') }}">Download
-                    the
-                    latest Edition of NOW</a>
+                <img class="info-img center" src="{{ url_for('static', filename='site-images/book.svg') }}">
+                <form action="{{ url_for('magazine') }}" method="post">
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Download the latest Edition of NOW">
+                </form>
             </div>
         </div>
     </div>
