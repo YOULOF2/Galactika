@@ -1,3 +1,4 @@
+import subprocess
 import pdfkit
 from jinja2 import Environment, FileSystemLoader
 from PyPDF2 import PdfFileMerger, PdfFileReader
@@ -12,7 +13,16 @@ from time import sleep
 
 class NewsLetterMaker:
     def __init__(self):
-        self.path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+        if 'DYNO' in os.environ:
+            print('loading wkhtmltopdf path on heroku')
+            self.path_wkhtmltopdf = subprocess.Popen(
+                ['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')],
+                # Note we default to 'wkhtmltopdf' as the binary name
+                stdout=subprocess.PIPE).communicate()[0].strip()
+        else:
+            print('loading wkhtmltopdf path on localhost')
+            self.path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+
         self.config = pdfkit.configuration(wkhtmltopdf=self.path_wkhtmltopdf)
         self.env = Environment(loader=FileSystemLoader('templates/newsletter'))
         self.merger = PdfFileMerger()
