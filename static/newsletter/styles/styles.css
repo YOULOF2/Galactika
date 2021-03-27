@@ -1,0 +1,5 @@
+@page { size: A2; margin: 0cm }
+@media print {
+    nav { display: none }
+}
+}

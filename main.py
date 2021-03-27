@@ -14,7 +14,13 @@ import requests
 from errors import *
 from wallpapers import WALLPAPERS
 from dotenv import load_dotenv
-from Newsmaker import NewsLetterMaker
+from PyPDF2 import PdfFileMerger, PdfFileReader
+import os
+import requests
+from random import choice
+import json
+from flask_weasyprint import HTML, render_pdf, CSS
+from time import sleep
 
 load_dotenv()
 
@@ -168,6 +174,49 @@ class Comment(db.Model):
     # ********************************************* #
 
     text = db.Column(db.Text, nullable=False)
+
+
+class NewsLetterMaker:
+    def __init__(self):
+        self.merger = PdfFileMerger()
+        self.issue_location = "static/newsletter/pdfs/final_issue.pdf"
+        self.issue_pages = ["static/newsletter/pdfs/cover_page.pdf", "page1.pdf", "page2.pdf", "page3.pdf", "page4.pdf"]
+        trivia_questions = requests.get(url="https://opentdb.com/api.php?amount=5&type=boolean").json()["results"]
+        with open("quotes.json") as file:
+            file_data = json.load(file)["quotes"]
+        self.random_quotes = []
+        for i in range(6):
+            random_quote = choice(file_data)
+            self.random_quotes.append(random_quote)
+        self.all_data = {
+            "trivia": trivia_questions,
+            "quotes": self.random_quotes
+        }
+
+    def make_magic(self):
+        """
+        This method takes the relevantint information in and automaticaly produces a pdf.
+        According to self.issue_pages list, the pages are made.
+        The output location can be changed by changing the self.issue_location string value.
+        """
+        try:
+            os.remove(self.issue_location)
+            for file in self.issue_pages[1:]:
+                os.remove(file)
+        except FileNotFoundError:
+            pass
+
+        # for i in range(1, len(self.issue_pages)):
+        html = render_template(f"newsletter/page{3}.html", all_data=self.all_data, encoding="UTF-8")
+        # clean_html = html.replace("&quot;", '"')
+        # with open("test_file.html", "w") as file:
+        #     file.write(clean_html)
+        file = HTML(string=html)
+        file.write_pdf(f"page{3}.pdf")
+        # # sleep(5)
+        # for file in self.issue_pages:
+        #     self.merger.append(PdfFileReader(open(file, 'rb')), import_bookmarks=False)
+        # self.merger.write(self.issue_location)
 
 
 # ==================================================================================================================== #
