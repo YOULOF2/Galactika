@@ -216,7 +216,13 @@ class NewsLetterMaker:
         According to self.issue_pages list, the pages are made.
         The output location can be changed by changing the self.issue_location string value.
         """
-        # logging.info('Cleaning system from previous run.')
+        with open("test.html" , "w") as file:
+            data = render_template("newsletter/page4.html", all_data=self.all_data)
+            file.write(data)
+        with open("test1.html", "w") as file:
+            data = render_template("newsletter/page1.html", all_data=self.all_data)
+            file.write(data)
+        logger("INFO", "Cleaning system from previous run.")
         try:
             os.remove(self.issue_location)
             for file in self.issue_pages[1:]:
@@ -225,7 +231,7 @@ class NewsLetterMaker:
             pass
 
         for i in range(1, len(self.issue_pages)):
-            # logging.info(f'Creating page{i}.')
+            logger("INFO", f"Creating page{i}.")
             html_file = render_template(f'newsletter/page{i}.html', all_data=self.all_data)
             issues_page = HTML(string=html_file)
             issues_page.write_pdf(f"page{i}.pdf")
@@ -345,6 +351,8 @@ def set_wallapper(wallpaper_number):
 @app.route("/magazine", methods=["GET", "POST"])
 def magazine():
     if request.method == "POST":
+        maker = NewsLetterMaker()
+        maker.make_magic()
         return redirect(url_for("loading_mag"))
     return render_template("newsletter/get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download",
                            user_logged_in=current_user.is_authenticated)
@@ -352,16 +360,20 @@ def magazine():
 
 @app.route("/loading-mag")
 def loading_mag():
-    maker = NewsLetterMaker()
-    maker.make_magic()
-    return render_template("newsletter/loading_mag.html")
+    return render_template("newsletter/loading_mag.html", user_logged_in=current_user.is_authenticated,
+                           task="Loading Your Issue", favourite_bg=get_favourite_wallpaper())
 
 
 @app.route("/create-mag")
 def create_mag():
     @stream_with_context
     def generate():
-        yield render_template_string('<link rel=stylesheet href="{{ url_for("static", filename="newsletter/styles/stream.css") }}">')
+        yield render_template_string(
+            """
+            <link rel=stylesheet href="{{ url_for("static", filename="newsletter/styles/stream.css") }}">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+            """)
         with open("create_mag.txt") as file:
             lines = file.readlines()
             for line in lines:

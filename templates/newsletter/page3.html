@@ -1,24 +1,24 @@
 {% extends "newsletter/base.html" %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto" style="padding:10%;color:white;">
-                <div class="jumbotron rounded">
-                    <h1 class="flash_news_title">Trivia Time!!</h1>
-                    <ul>
-                    {% for question in all_data['trivia']:  %}
-                        <li style="padding:2%">
-                                <h4 style="color:white;">{{ question["question"] }}</h4>
-                        <ul>
-                                <li><h5 style="color:green;">True</h5></li>
-                                <li><h5 style="color:red;">False</h5></li>
-                            </ul>
-                        </li>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto" style="padding:10%;color:white;">
+            <div class="jumbotron rounded">
+                <h1 class="flash_news_title">Trivia Time!!</h1>
+                <ul>
+                    {% for question in all_data['trivia']: %}
+                    <li style="padding:2%">
+                        <h4 style="color:white;">{{ question["question"] }}</h4>
+                        <br>
+                        <h5 style="color:green;">True</h5>
+                        <br>
+                        <h5 style="color:red;">False</h5>
+                    </li>
                     {% endfor %}
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

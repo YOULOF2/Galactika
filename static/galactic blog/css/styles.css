@@ -27,3 +27,11 @@
     color: rgb(0, 0, 0); 
     mix-blend-mode: difference;
 }
+
+
+.mag-log {
+    border-radius: 0.1rem;
+    background-color: #F8F8F8;
+    margin: 2rem;
+    padding: 8rem;
+}
