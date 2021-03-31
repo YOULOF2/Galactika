@@ -1,5 +1,7 @@
-@page { size: A2; margin: 0cm }
-@media print {
-    nav { display: none }
+@page {
+size: A4; margin: 0cm
 }
+
+body {
+    background-color:white;
 }

@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, abort, send_from_directory
+from flask import Flask, request, render_template, redirect, url_for, flash, abort, send_from_directory, \
+    render_template_string, stream_with_context
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -9,8 +10,6 @@ from flask_login import UserMixin, login_user, LoginManager, current_user, logou
 from forms import SettingsForm, CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
-import os
-import requests
 from errors import *
 from wallpapers import WALLPAPERS
 from dotenv import load_dotenv
@@ -19,8 +18,9 @@ import os
 import requests
 from random import choice
 import json
-from flask_weasyprint import HTML, render_pdf, CSS
+from flask_weasyprint import HTML, CSS, render_pdf
 from time import sleep
+import html
 
 load_dotenv()
 
@@ -41,6 +41,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = APP_SECRET_KEY
 ckeditor = CKEditor(app)
 Bootstrap(app)
+with open("create_mag.txt", "w") as file:
+    pass
 # ==================================================================================================================== #
 # CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
@@ -121,6 +123,11 @@ def get_favourite_wallpaper():
         return DEFAULT_BG
 
 
+def logger(level, message):
+    with open("create_mag.txt", "a") as file:
+        file.write(f"{level}: {message}\n")
+
+
 # ==================================================================================================================== #
 # CONFIGURE TABLES
 class User(db.Model, UserMixin):
@@ -178,18 +185,28 @@ class Comment(db.Model):
 
 class NewsLetterMaker:
     def __init__(self):
+        logger("INFO", "Initializing the Newslettermaker.")
         self.merger = PdfFileMerger()
         self.issue_location = "static/newsletter/pdfs/final_issue.pdf"
         self.issue_pages = ["static/newsletter/pdfs/cover_page.pdf", "page1.pdf", "page2.pdf", "page3.pdf", "page4.pdf"]
-        trivia_questions = requests.get(url="https://opentdb.com/api.php?amount=5&type=boolean").json()["results"]
+
+        with open("trivia_questions.json") as file:
+            logger("INFO", "Loading random Trivia questions from archive.")
+            file_data = json.load(file)["data"]
+            self.trivia_questions = []
+            for i in range(6):
+                random_triv = choice(file_data)
+                self.trivia_questions.append(random_triv)
+
         with open("quotes.json") as file:
+            logger("INFO", "Loading random Quotes from archive.")
             file_data = json.load(file)["quotes"]
-        self.random_quotes = []
-        for i in range(6):
-            random_quote = choice(file_data)
-            self.random_quotes.append(random_quote)
+            self.random_quotes = []
+            for i in range(6):
+                random_quote = choice(file_data)
+                self.random_quotes.append(random_quote)
         self.all_data = {
-            "trivia": trivia_questions,
+            "trivia": self.trivia_questions,
             "quotes": self.random_quotes
         }
 
@@ -199,6 +216,7 @@ class NewsLetterMaker:
         According to self.issue_pages list, the pages are made.
         The output location can be changed by changing the self.issue_location string value.
         """
+        # logging.info('Cleaning system from previous run.')
         try:
             os.remove(self.issue_location)
             for file in self.issue_pages[1:]:
@@ -206,14 +224,12 @@ class NewsLetterMaker:
         except FileNotFoundError:
             pass
 
-        # for i in range(1, len(self.issue_pages)):
-        html = render_template(f"newsletter/page{3}.html", all_data=self.all_data, encoding="UTF-8")
-        # clean_html = html.replace("&quot;", '"')
-        # with open("test_file.html", "w") as file:
-        #     file.write(clean_html)
-        file = HTML(string=html)
-        file.write_pdf(f"page{3}.pdf")
-        # # sleep(5)
+        for i in range(1, len(self.issue_pages)):
+            # logging.info(f'Creating page{i}.')
+            html_file = render_template(f'newsletter/page{i}.html', all_data=self.all_data)
+            issues_page = HTML(string=html_file)
+            issues_page.write_pdf(f"page{i}.pdf")
+            sleep(5)
         # for file in self.issue_pages:
         #     self.merger.append(PdfFileReader(open(file, 'rb')), import_bookmarks=False)
         # self.merger.write(self.issue_location)
@@ -329,11 +345,30 @@ def set_wallapper(wallpaper_number):
 @app.route("/magazine", methods=["GET", "POST"])
 def magazine():
     if request.method == "POST":
-        maker = NewsLetterMaker()
-        maker.make_magic()
-        return send_from_directory(directory="static/newsletter/pdfs", filename="final_issue.pdf")
-    return render_template("get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download",
+        return redirect(url_for("loading_mag"))
+    return render_template("newsletter/get-mag.html", favourite_bg=get_favourite_wallpaper(), task="Magazine Download",
                            user_logged_in=current_user.is_authenticated)
+
+
+@app.route("/loading-mag")
+def loading_mag():
+    maker = NewsLetterMaker()
+    maker.make_magic()
+    return render_template("newsletter/loading_mag.html")
+
+
+@app.route("/create-mag")
+def create_mag():
+    @stream_with_context
+    def generate():
+        yield render_template_string('<link rel=stylesheet href="{{ url_for("static", filename="newsletter/styles/stream.css") }}">')
+        with open("create_mag.txt") as file:
+            lines = file.readlines()
+            for line in lines:
+                yield render_template_string("<p>{{ line }}</p>\n", line=line)
+                sleep(1)
+
+    return app.response_class(generate())
 
 
 # ==================================================================================================================== #
